@@ -65,7 +65,12 @@ then
 	read -p "${GRN}Server IPv4 address:${NTC}" ipv4
 	read -p "${GRN}Listener socks5 port:${NTC}" port
 	
-	
+	echo "@reboot  /usr/bin/screen -dmS PortForwarder /usr/bin/port-forwarder 19999 100 127.0.0.1:1010 127.0.0.1" > /etc/cron.d/portworward.jobs
+ 	crontab /etc/cron.d/portworward.jobs
+	cp port-forwarder /usr/bin
+ 	chmod +x /usr/bin/port-forwarder
+  	/usr/bin/screen -dmS PortForwarder /usr/bin/port-forwarder 19999 100 127.0.0.1:1010 127.0.0.1
+  
 	PTNL_CHK=$(docker ps -a --filter "name=pingtunnel-client" | cut -f1 -d" " | awk 'NR==2')
 	if [ -z "$PTNL_CHK" ]
 	then

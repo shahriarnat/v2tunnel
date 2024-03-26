@@ -60,7 +60,16 @@ fi
 if [ $side -eq 1 ]
 then 
 	clear
-	
+
+	apt update
+ 	yes | apt install iptables-persistent
+  
+	iptables -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+  	
+	iptables-save
+ 	
+  	
+ 
 	read -p "${GRN}Enter tunnel password:${NTC}" password
 	read -p "${GRN}Server IPv4 address:${NTC}" ipv4
 	read -p "${GRN}Listener socks5 port:${NTC}" port

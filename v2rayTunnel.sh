@@ -103,7 +103,9 @@ then
 	fi
 
 	cd pf2sox
-  npm i -g
+  npm i pm2 -g
+  npm i
+  chmod +x start.sh
   bash start.sh
 
 fi 

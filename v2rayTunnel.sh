@@ -68,18 +68,21 @@ then
   	
 	iptables-save
  	
-  	
- 
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+  nvm install 20
+  node -v
+  npm -v
+
 	read -p "${GRN}Enter tunnel password:${NTC}" password
 	read -p "${GRN}Server IPv4 address:${NTC}" ipv4
 	read -p "${GRN}Listener socks5 port:${NTC}" port
 	
-	echo "@reboot  /usr/bin/screen -dmS PortForwarder /usr/bin/port-forwarder 19999 100 127.0.0.1:1010 127.0.0.1" > /etc/cron.d/portworward.jobs
- 	crontab /etc/cron.d/portworward.jobs
-	cp port-forwarder /usr/bin
- 	chmod +x /usr/bin/port-forwarder
-  	/usr/bin/screen -dmS PortForwarder /usr/bin/port-forwarder 19999 100 127.0.0.1:1010 127.0.0.1
-  
+
 	PTNL_CHK=$(docker ps -a --filter "name=pingtunnel-client" | cut -f1 -d" " | awk 'NR==2')
 	if [ -z "$PTNL_CHK" ]
 	then
@@ -93,9 +96,14 @@ then
 	then
 		docker run --name pingtunnel-client -d \
 		--restart=always \
-		-p $port:1080 \
+		-p 127.0.0.1:$port:1080 \
 		shnn786/pingtunnel ./pingtunnel -type client -l :1080 -s $ipv4 -sock5 1 -key $password
 	else
 		echo -e "\e[32mpingtunnel is running\e[0m"
 	fi
+
+	cd pf2sox
+  npm i -g
+  bash start.sh
+
 fi 

@@ -74,6 +74,8 @@ then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
+  apn install npm
+  appt install nvm
   nvm install 20
   node -v
   npm -v
